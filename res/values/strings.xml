@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProjectMan</string>
+    <string name="title_activity_project_select">Select Project</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="selectProject">Select Project</string>
+    <string name="proceed_to_project">Proceed</string>
+    <string name="create_new_shop">Create New Shop</string>
+    <string name="title_activity_project">My Project</string>
+    <string name="project_desc_textfield">Project Details</string>
+    <string name="submit_button">Submit</string>
+
+</resources>
