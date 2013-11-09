@@ -1,11 +1,5 @@
 package com.projectman;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
@@ -13,10 +7,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,21 +25,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
 
 public class ProjectActivity extends FragmentActivity implements
 					GooglePlayServicesClient.ConnectionCallbacks,
 			 GooglePlayServicesClient.OnConnectionFailedListener{
 	
-	//Instance Variables
+	/**
+	 * UI Variables
+	 */
 	Button submitButton;
+	private EditText mShopNameView;
+	private EditText mShopContactView;
+	private EditText mShopRadiusView;
+	
+	/**
+	 * Instance Variable
+	 */
 	private static String createShopUrl = "http://10.0.2.2:3000/shops.json";
     private JSONParser jsonParser = new JSONParser();
+    private String shopName;
+    private String shopContact;
+    private String shopRadius;
+    private String shopLatitude;
+    private String shopLongitude;
+    private String visitDatetime = "8.11.2013 7.17 PM";
+    private String projectID;
+    
     /**
      * Define a request code to send to Google Play services
      * This code is returned in Activity.onActivityResult
@@ -56,12 +70,15 @@ public class ProjectActivity extends FragmentActivity implements
     /**
      *  Stores the current instantiation of the location client in this object
      */
-    private LocationClient mLocationClient;
+    //private LocationClient mLocationClient;
     
     /**
 	 * Keep track of the shop creation task to ensure we can cancel it if requested.
 	 */
 	private ShopCreationTask mAuthTask = null;
+	
+	LocationManager mlocManager;
+	MyLocationListener mlocListener;
 	
 	/**
 	 * Global variable to hold the current location
@@ -75,13 +92,48 @@ public class ProjectActivity extends FragmentActivity implements
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
+		//Get Project_ID from Project selection Activity.
+		Bundle extras = this.getIntent().getExtras();
+		projectID = extras.getString("project_id");
+		
+		//Populate Views from XML.
 		submitButton = (Button)findViewById(R.id.submit_button);
+		mShopNameView = (EditText) findViewById(R.id.shop_name_edit);
+		mShopContactView = (EditText) findViewById(R.id.shop_contact_edit);
+		mShopRadiusView = (EditText) findViewById(R.id.shop_radius_edit);
+		
+		
+		/*
+         * Create a new location client, using the enclosing class to
+         * handle callbacks.
+         */
+        //mLocationClient = new LocationClient(this, this, this);
+        //mCurrentLocation = mLocationClient.getLastLocation();
+		mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		mlocListener = new MyLocationListener();
+		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,0, mlocListener);
 		
 		submitButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				mCurrentLocation = mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				shopLatitude = mCurrentLocation.getLatitude()+"";
+				shopLongitude = mCurrentLocation.getLongitude()+"";
+				
+				Log.d("Lat", shopLatitude);
+				Log.d("Shop Longitude", shopLongitude);
+				String Text = "My current shop location is: " + "Latitude = "
+		                + shopLatitude + "Longitude = " + shopLongitude;
+				
+		        Toast.makeText(getApplicationContext(), Text, Toast.LENGTH_SHORT)
+		                    .show();
+				
+				shopName =  mShopNameView.getText().toString();
+				shopRadius = mShopRadiusView.getText().toString();
+				shopContact = mShopContactView.getText().toString();
+				
 				mAuthTask = new ShopCreationTask();
 				mAuthTask.execute((Void) null);
 				
@@ -92,12 +144,7 @@ public class ProjectActivity extends FragmentActivity implements
 				
 			}
 		});
-		/*
-         * Create a new location client, using the enclosing class to
-         * handle callbacks.
-         */
-        mLocationClient = new LocationClient(this, this, this);
-        mCurrentLocation = mLocationClient.getLastLocation();
+		
 	}
 
 	/**
@@ -134,18 +181,18 @@ public class ProjectActivity extends FragmentActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public JSONObject createShop() throws Exception{
+	public String createShop() throws Exception{
 	    // Building Parameters
-	    List<NameValuePair> params = new ArrayList<NameValuePair>();
+	    JSONObject params = new JSONObject();
+	    params.put("contact", shopContact);
+	    params.put("latitude", shopLatitude);
+	    params.put("longitude", shopLongitude);
+	    params.put("name", shopName);
+	    params.put("project_id", projectID);
+	    params.put("visit_datetime", visitDatetime);
+	    params.put("shop_radius", shopRadius);
 	    
-	    params.add(new BasicNameValuePair("contact", "PO Box hehe"));
-	    params.add(new BasicNameValuePair("latitude", "84774546545"));
-	    params.add(new BasicNameValuePair("longitude", "9882763626"));
-	    params.add(new BasicNameValuePair("name", "G Shop"));
-	    params.add(new BasicNameValuePair("project_id", "1"));
-	    params.add(new BasicNameValuePair("visit_datetime", "12.34.565.2013"));
-	    
-	    JSONObject json = jsonParser.getJSONObjectFromUrl(createShopUrl,params);
+	    String json = jsonParser.getJSONObjectFromUrl(createShopUrl,params);
 	    
 	    return json;
 	}
@@ -155,7 +202,7 @@ public class ProjectActivity extends FragmentActivity implements
 	 * the user.
 	 */
 	public class ShopCreationTask extends AsyncTask<Void, Void, Boolean> {
-		JSONObject json;
+		String json;
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
@@ -182,8 +229,8 @@ public class ProjectActivity extends FragmentActivity implements
 			if (success) {
 				//do something
 				try {
-					Log.d("My JSON from creating a shop:Name ", json.getString("name"));
-				} catch (JSONException e) {
+					Log.d("My JSON from creating a shop:Name ", json);
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -364,7 +411,7 @@ public class ProjectActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         // Connect the client.
-        mLocationClient.connect();
+        //mLocationClient.connect();
     }
     
     /**
@@ -373,7 +420,7 @@ public class ProjectActivity extends FragmentActivity implements
     @Override
     protected void onStop() {
         // Disconnecting the client invalidates it.
-        mLocationClient.disconnect();
+        //mLocationClient.disconnect();
         super.onStop();
     }
     
@@ -423,6 +470,37 @@ public class ProjectActivity extends FragmentActivity implements
             //errorFragment.show(getSupportFragmentManager(), APPTAG);
             errorFragment.show(getFragmentManager(), APPTAG);
         }
+    }
+    
+    public class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            loc.getLatitude();
+            loc.getLongitude();
+            String Text = "My current shop location is: " + "Latitude = "
+                + loc.getLatitude() + "Longitude = " + loc.getLongitude();
+ 
+            shopLatitude = loc.getLatitude()+"";
+            shopLongitude = loc.getLongitude()+"";
+            Toast.makeText(getApplicationContext(), Text, Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Toast.makeText(getApplicationContext(), "Disable",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Toast.makeText(getApplicationContext(), "Enable",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
     }
 
    

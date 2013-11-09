@@ -11,6 +11,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -136,14 +137,18 @@ public class JSONParser {
      * @return a JSONObject
      * @throws Exception
      */
-    public JSONObject getJSONObjectFromUrl(String url, List<NameValuePair> params) throws Exception {
+    public String getJSONObjectFromUrl(String url, JSONObject params) throws Exception {
 	    	 
 	    	//Making HTTP request
 		
 	        //defaultHttpClient
 	        DefaultHttpClient httpClient = new DefaultHttpClient();
 	        HttpPost httpPost = new HttpPost(url);
-	        httpPost.setEntity(new UrlEncodedFormEntity(params));
+	        StringEntity entity = new StringEntity(params.toString());
+	        //httpPost.setEntity(new UrlEncodedFormEntity(params));
+	        httpPost.addHeader("Content-Type","application/json");
+	        httpPost.setEntity(entity);
+	        //httpPost.addHeader("Content-Type","application/json");
 	
 	        HttpResponse httpResponse = httpClient.execute(httpPost);
 	        HttpEntity httpEntity = httpResponse.getEntity();
@@ -167,14 +172,15 @@ public class JSONParser {
 	    }
 	
 	    // try parse the string to a JSON object
-	    try {
-	        Obj = new JSONObject(json);
-	    } catch (JSONException e) 
-	    {
-	    	throw new RuntimeException(e);
-	    }
+	    //try {
+	        //Obj = new JSONObject(json);
+	    //} catch (JSONException e) 
+	    //{
+	    	//throw new RuntimeException(e);
+	    //}
 	
-	    return Obj;
+	    //return Obj;
+	    return json;
 	
 	}
 }

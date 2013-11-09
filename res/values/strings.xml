@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ProjectMan</string>
-    <string name="title_activity_project_select">Select Project</string>
+    <string name="app_name">Project Man</string>
+    <string name="title_activity_project_select">ProjectMan</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="selectProject">Select Project</string>
@@ -11,5 +11,9 @@
     <string name="title_activity_project">My Project</string>
     <string name="project_desc_textfield">Project Details</string>
     <string name="submit_button">Submit</string>
+    <string name="shop_name">Shop Name</string>
+    <string name="shop_contact">Shop Contact</string>
+    <string name="shop_radius">Shop Radius</string>
+    <string name="shop_details_tv">Shop Details</string>
 
 </resources>

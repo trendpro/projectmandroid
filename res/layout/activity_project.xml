@@ -8,30 +8,58 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ProjectActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/project_desc_textfield"
-        android:textSize="35sp" />
-
-    <WebView
-        android:id="@+id/project_details_webView"
+    <ScrollView
+        android:id="@+id/sho_details_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/submit_button"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="21dp" />
+        android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/project_details_webView"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="52dp"
-        android:text="@string/submit_button" />
+        <LinearLayout
+            style="@style/LoginFormContainer"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/shop_details_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shop_details_tv"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/shop_name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/shop_name"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/shop_contact_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/shop_contact"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/shop_radius_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/shop_radius"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:text="@string/submit_button" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
