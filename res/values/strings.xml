@@ -15,5 +15,16 @@
     <string name="shop_contact">Shop Contact</string>
     <string name="shop_radius">Shop Radius</string>
     <string name="shop_details_tv">Shop Details</string>
+    <string name="title_activity_sales">SalesActivity</string>
+    
+    <string name="insert_data_tv">Insert Data</string>
+    <string name="sales_project_list_edit">Project List</string>
+    <string name="sale_shop_name_edit">Shop Name</string>
+    <string name="sales_value_edit">Sales</string>
+    <string name="sales_coord_lat_edit">Latitude</string>
+    <string name="sales_coord_long_edit">Longitude</string>
+    <string name="Sales_submit_btn">Submit</string>
+    
+    <string name="check_projects_menu">Check Projects</string>
 
 </resources>

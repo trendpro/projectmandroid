@@ -227,7 +227,7 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
-				Intent startProjectSelectioIntent = new Intent(getApplicationContext(), ProjectSelectActivity.class);
+				Intent startProjectSelectioIntent = new Intent(getApplicationContext(), SalesActivity.class);
 				startActivity(startProjectSelectioIntent);
 				finish();
 			} else {
