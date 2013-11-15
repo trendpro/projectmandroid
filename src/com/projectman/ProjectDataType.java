@@ -1,12 +1,12 @@
 package com.projectman;
 
 public class ProjectDataType {
-	String name;
-	String id;
-	String description;
+	private String name;
+	private String id;
+	private String description;
 	
 	public ProjectDataType(String nm,String id, String description){
-		name = nm;
+		this.name = nm;
 		this.id = id;
 		this.description = description;
 	}

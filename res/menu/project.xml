@@ -5,5 +5,15 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
+    
+    <item android:id="@+id/go_to_sales_from_project"
+          android:icon="@drawable/ic_menu_check_projects"
+          android:title="@string/go_to_sales"
+          android:showAsAction="ifRoom"/>
+    
+    <item android:id="@+id/logout_from_projects_project"
+          android:icon="@drawable/ic_menu_check_projects"
+          android:title="@string/logout"
+          android:showAsAction="ifRoom"/>
 
 </menu>

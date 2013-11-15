@@ -10,4 +10,9 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
+    
+    <item android:id="@+id/logout_from_sales"
+          android:icon="@drawable/ic_menu_check_projects"
+          android:title="@string/logout"
+          android:showAsAction="ifRoom"/>
 </menu>

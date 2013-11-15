@@ -26,5 +26,7 @@
     <string name="Sales_submit_btn">Submit</string>
     
     <string name="check_projects_menu">Check Projects</string>
+    <string name="go_to_sales">Enter Sales</string>
+    <string name="logout">Logout</string>
 
 </resources>

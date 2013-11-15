@@ -40,7 +40,9 @@ public class SalesActivity extends Activity {
 	/**
 	 * Class Variables
 	 */
-	private static String shopListUrl = "http://10.0.2.2:3000/shops.json";
+	private static String shopListUrl = "http://pman-platform.herokuapp.com/shops.json";
+	//private static String shopListUrl = "http://10.0.2.2:3000/shops.json";
+	
     private JSONParser jsonParser = new JSONParser();
     
     private String SelectedShopID = "987765543332";
@@ -48,7 +50,9 @@ public class SalesActivity extends Activity {
     private String curLatitude = "0.0";
     private String curLongitude = "0.0";
     private ShopDataType nearestShop;
-    private static String createSaleUrl = "http://10.0.2.2:3000/transactions.json";
+    //private static String createSaleUrl = "http://10.0.2.2:3000/transactions.json";
+    private static String createSaleUrl = "http://pman-platform.herokuapp.com/transactions.json";
+    
     private JSONParser jsonCreateParser = new JSONParser();
     
     /**
@@ -137,6 +141,13 @@ public class SalesActivity extends Activity {
 				finish();
 	        	
 	            return true;
+	        case R.id.logout_from_sales:
+	            //
+	        	Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
+				startActivity(logoutIntent);
+				finish();
+	        	
+	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -190,30 +201,34 @@ public class SalesActivity extends Activity {
 	}
 	
 	public ShopDataType getNearestShop(ArrayList<ShopDataType> arr,Location mCurLoc){
-		
-		//Go through all shops comparing their lats and longs with 
-		//current location and return the closest.
-		int minIndex = 0;
-		
-		Location loc = new Location("network");
-		
-		loc.setLatitude(Double.parseDouble(arr.get(0).getShopLat()));
-		loc.setLongitude(Double.parseDouble(arr.get(0).getShopLong()));
-		double minDist = mCurLoc.distanceTo(loc);
-		
-		for(int i = 1; i < arr.size(); i++){
-			//System.out.println("Name: " + m_orders.get(i).getShopName()+" Id: " + m_orders.get(i).getShopId());
-			loc.setLatitude(Double.parseDouble(arr.get(i).getShopLat()));
-			loc.setLongitude(Double.parseDouble(arr.get(i).getShopLong()));
+		ShopDataType shop = new ShopDataType("No shop found","36.90358566","-1.20940377","id");
+		if(!arr.isEmpty()){
+			//Go through all shops comparing their lats and longs with 
+			//current location and return the closest.
+			int minIndex = 0;
 			
-			double curDist = mCurLoc.distanceTo(loc);
+			Location loc = new Location("network");
 			
-			if(minDist > curDist){
-				minDist = curDist;
-				minIndex = i;
+			loc.setLatitude(Double.parseDouble(arr.get(0).getShopLat()));
+			loc.setLongitude(Double.parseDouble(arr.get(0).getShopLong()));
+			double minDist = 0.0;
+			minDist = mCurLoc.distanceTo(loc);
+			
+			for(int i = 0; i < arr.size(); i++){
+				//System.out.println("Name: " + m_orders.get(i).getShopName()+" Id: " + m_orders.get(i).getShopId());
+				loc.setLatitude(Double.parseDouble(arr.get(i).getShopLat()));
+				loc.setLongitude(Double.parseDouble(arr.get(i).getShopLong()));
+				
+				double curDist = mCurLoc.distanceTo(loc);
+				
+				if(minDist > curDist){
+					minDist = curDist;
+					minIndex = i;
+				}
 			}
+			shop =  arr.get(minIndex);
 		}
-		return arr.get(minIndex);
+		return shop;
 	}
 	
 	/**
@@ -282,8 +297,8 @@ public class SalesActivity extends Activity {
             String Text = "My current shop location is: " + "Latitude = "
                 + loc.getLatitude() + "Longitude = " + loc.getLongitude();
  
-            curLatitude = "Lat: "+loc.getLatitude();
-            curLongitude = "Long: "+loc.getLongitude();
+            curLatitude = "Cur Lat: "+loc.getLatitude();
+            curLongitude = "Cur Long: "+loc.getLongitude();
             
             salesCoordLat.setText(curLatitude);
     		salesCoordLong.setText(curLongitude);

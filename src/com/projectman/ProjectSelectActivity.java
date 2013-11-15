@@ -41,7 +41,9 @@ public class ProjectSelectActivity extends  ListActivity {
 	/**
 	 * Instance Variables
 	 */
-    private static String projectListUrl = "http://10.0.2.2:3000/projects.json";
+    private static String projectListUrl = "http://pman-platform.herokuapp.com/projects.json";
+    //private static String projectListUrl = "http://10.0.2.2:3000/projects.json";
+    
     private JSONParser jsonParser = new JSONParser();
     
     private String SelectedProjectID = "987765543332";
@@ -153,6 +155,20 @@ public class ProjectSelectActivity extends  ListActivity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.go_to_sales:
+            //
+        	Intent startProjectSelectioIntent = new Intent(getApplicationContext(), SalesActivity.class);
+			startActivity(startProjectSelectioIntent);
+			finish();
+        	
+            return true;
+		case R.id.logout_from_projects_select:
+            //
+        	Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
+			startActivity(logoutIntent);
+			finish();
+        	
+            return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

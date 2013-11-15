@@ -47,7 +47,9 @@ public class ProjectActivity extends FragmentActivity implements
 	/**
 	 * Instance Variable
 	 */
-	private static String createShopUrl = "http://10.0.2.2:3000/shops.json";
+	//private static String createShopUrl = "http://10.0.2.2:3000/shops.json";
+	private static String createShopUrl = "http://pman-platform.herokuapp.com/shops.json";
+	
     private JSONParser jsonParser = new JSONParser();
     private String shopName;
     private String shopContact;
@@ -177,6 +179,20 @@ public class ProjectActivity extends FragmentActivity implements
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.go_to_sales_from_project:
+            //
+        	Intent startProjectSelectioIntent = new Intent(getApplicationContext(), SalesActivity.class);
+			startActivity(startProjectSelectioIntent);
+			finish();
+        	
+            return true;
+		case R.id.logout_from_projects_project:
+            //
+        	Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
+			startActivity(logoutIntent);
+			finish();
+        	
+            return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
